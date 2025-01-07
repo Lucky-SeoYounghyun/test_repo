@@ -1,0 +1,20 @@
+name: Commit Message Validation
+
+on:
+  push:        # 모든 브랜치에서 push 이벤트 실행
+  pull_request: # 모든 브랜치에서 pull_request 이벤트 실행
+
+jobs:
+  lint-commit-message:
+    name: Lint Commit Messages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Commitlint
+        run: npm install @commitlint/{config-conventional,cli} --save-dev
+
+      - name: Lint commit message
+        run: npx commitlint --from=HEAD~1 --to=HEAD
