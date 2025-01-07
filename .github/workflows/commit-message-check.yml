@@ -1,8 +1,8 @@
 name: Commit Message Validation
 
 on:
-  push:        # 모든 브랜치에서 push 이벤트 실행
-  pull_request: # 모든 브랜치에서 pull_request 이벤트 실행
+  push:
+  pull_request:
 
 jobs:
   lint-commit-message:
@@ -17,4 +17,9 @@ jobs:
         run: npm install @commitlint/{config-conventional,cli} --save-dev
 
       - name: Lint commit message
-        run: npx commitlint --from=HEAD~1 --to=HEAD
+        run: |
+          if git rev-parse HEAD~1 >/dev/null 2>&1; then
+            npx commitlint --from=HEAD~1 --to=HEAD
+          else
+            echo "No previous commits to validate."
+          fi
